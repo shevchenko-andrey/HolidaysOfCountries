@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getCountries } from '../../services/api/countryService';
 import styles from './App.module.scss';
 import { ListOfCountry } from 'components/ListOfCountry/ListOfCountry';
@@ -27,13 +27,14 @@ import { Button } from 'components/Button/Button';
 // >>>>>>> Coding part goes next <<<<<<<<
 
 export const App = () => {
-  const [data, setData] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [query, setQuery] = useState([]);
   const [selectedCountryHolidays, setselectedCountryHolidays] = useState([]);
 
   useEffect(() => {
     const fetchHolidays = async () => {
       const date = await getCountries();
-      setData(date);
+      setCountries(date);
     };
     fetchHolidays();
   }, []);
@@ -41,6 +42,12 @@ export const App = () => {
   const onCountyClick = () => {
     // #3 update this function to handle county click and fetch holidays
   };
+
+  const filteredCountries = useMemo(
+    () => countries.filter(country => country.name.includes(query)),
+    [countries, query]
+  );
+
   return (
     <div className={styles.container}>
       <h1>React Test</h1>
@@ -48,13 +55,13 @@ export const App = () => {
         <div className={styles['search-area']}>
           <section className={styles['search-field']}>
             {/* #2 On the input, filter the countries listed below */}
-            <SearchField />
+            <SearchField value={query} onChange={setQuery} />
             {/* #4 Sort button */}
             <Button />
             {/* #5 Reset button */}
             <Button />
           </section>
-          {data.length > 0 && <ListOfCountry countries={data}></ListOfCountry>}
+          <ListOfCountry countries={filteredCountries}></ListOfCountry>
         </div>
         <div className={styles['info-area']}>
           {/* #3 display selectedCountryHolidays here */}

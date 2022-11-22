@@ -1,10 +1,15 @@
 import React from 'react';
-import styles from './SearchField.module.scss';
-export const SearchField = () => {
+
+export const SearchField = ({ onChange, value }) => {
   return (
     <>
       <label htmlFor="search">Search country</label>
-      <input id="search" type="text" />
+      <input
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        id="search"
+        type="text"
+      />
     </>
   );
 };

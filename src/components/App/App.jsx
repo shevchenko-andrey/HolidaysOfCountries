@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { getCountries } from '../../services/api/countryService';
+import { getPublicHolidays } from '../../services/api/holidaysService';
 import styles from './App.module.scss';
-import { ListOfCountry } from 'components/ListOfCountry/ListOfCountry';
-import { SearchField } from 'components/SearchField/SearchField';
-import { Button } from 'components/Button/Button';
+import { ListOfCountry } from '../ListOfCountry/ListOfCountry';
+import { ListOfHolidays } from '../ListOfHolidays/ListOfHolidays';
+import { SearchField } from '../SearchField/SearchField';
+import { Button } from '../Button/Button';
 
 // >>>>> Instructions:
 // Fork the exercises to create your own personal workspace.
@@ -28,20 +30,36 @@ import { Button } from 'components/Button/Button';
 
 export const App = () => {
   const [countries, setCountries] = useState([]);
-  const [query, setQuery] = useState([]);
-  const [selectedCountryHolidays, setselectedCountryHolidays] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+  const [query, setQuery] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    const fetchHolidays = async () => {
-      const date = await getCountries();
-      setCountries(date);
+    const fetchCountries = async () => {
+      const countries = await getCountries();
+      setCountries(countries);
     };
-    fetchHolidays();
+    fetchCountries();
   }, []);
 
-  const onCountyClick = () => {
-    // #3 update this function to handle county click and fetch holidays
-  };
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (!selectedCountry) {
+      return;
+    }
+
+    const fetchHolidays = async () => {
+      const holidays = await getPublicHolidays(selectedCountry);
+      setHolidays(holidays);
+    };
+
+    fetchHolidays();
+  }, [selectedCountry]);
 
   const filteredCountries = useMemo(
     () => countries.filter(country => country.name.includes(query)),
@@ -61,10 +79,14 @@ export const App = () => {
             {/* #5 Reset button */}
             <Button />
           </section>
-          <ListOfCountry countries={filteredCountries}></ListOfCountry>
+          <ListOfCountry
+            onSelectCountry={setSelectedCountry}
+            countries={filteredCountries}
+          ></ListOfCountry>
         </div>
         <div className={styles['info-area']}>
-          {/* #3 display selectedCountryHolidays here */}
+          <p>{selectedCountry && selectedCountry}</p>
+          <ListOfHolidays holidays={holidays} />
         </div>
       </div>
     </div>

@@ -1,15 +1,20 @@
 import { Country } from 'components/Country/Country';
 import { useMemo } from 'react';
-import styles from './CountriesList.module.scss';
+import styles from './ListOfCountry.module.scss';
 
-export const ListOfCountry = ({ countries }) => {
+export const ListOfCountry = ({ countries, onSelectCountry }) => {
   const isExistCountries = useMemo(() => countries.length > 0, [countries]);
   if (isExistCountries) {
     return (
       <ul>
         {isExistCountries &&
           countries.map(country => (
-            <Country key={country.name} name={country.name} />
+            <Country
+              onSelectCountry={onSelectCountry}
+              countryCode={country.countryCode}
+              key={country.countryCode}
+              name={country.name}
+            />
           ))}
       </ul>
     );

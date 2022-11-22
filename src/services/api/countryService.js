@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { COUNTRY_API_SERVICE } from 'constants/api';
+import { COUNTRY_API_SERVICE } from '../../constants/api';
 
 export const getCountries = () =>
   axios

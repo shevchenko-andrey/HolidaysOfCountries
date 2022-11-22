@@ -26,10 +26,6 @@ import { Button } from 'components/Button/Button';
 
 // >>>>>>> Coding part goes next <<<<<<<<
 
-/*
-  #1 Place component ListItem here and use it in ListItems component below to display items
-*/
-
 export const App = () => {
   const [data, setData] = useState([]);
   const [selectedCountryHolidays, setselectedCountryHolidays] = useState([]);
@@ -46,11 +42,11 @@ export const App = () => {
     // #3 update this function to handle county click and fetch holidays
   };
   return (
-    <div class={styles.container}>
+    <div className={styles.container}>
       <h1>React Test</h1>
-      <div class={styles.body}>
-        <div class={styles['search-area']}>
-          <section class={styles['search-field']}>
+      <div className={styles.body}>
+        <div className={styles['search-area']}>
+          <section className={styles['search-field']}>
             {/* #2 On the input, filter the countries listed below */}
             <SearchField />
             {/* #4 Sort button */}
@@ -58,9 +54,9 @@ export const App = () => {
             {/* #5 Reset button */}
             <Button />
           </section>
-          <ListOfCountry items={data}></ListOfCountry>
+          {data.length > 0 && <ListOfCountry countries={data}></ListOfCountry>}
         </div>
-        <div class={styles['info-area']}>
+        <div className={styles['info-area']}>
           {/* #3 display selectedCountryHolidays here */}
         </div>
       </div>

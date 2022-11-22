@@ -1,9 +1,9 @@
 import React from 'react';
-
+import styles from './SearchField.module.scss';
 export const SearchField = () => {
   return (
     <>
-      <label for="search">Search text</label>
+      <label htmlFor="search">Search country</label>
       <input id="search" type="text" />
     </>
   );

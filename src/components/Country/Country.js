@@ -1,5 +1,9 @@
 import React from 'react';
 
-export const Country = () => {
-  return <li>{/* #1 place for Item */}</li>;
+export const Country = ({ name }) => {
+  return (
+    <li>
+      <span>{name}</span>
+    </li>
+  );
 };

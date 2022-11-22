@@ -6,7 +6,7 @@ export const SearchField = ({ onChange, value }) => {
       <label htmlFor="search">Search country</label>
       <input
         value={value}
-        onChange={e => onChange(e.target.value || console.log(e.target))}
+        onChange={e => onChange(e.target.value || '')}
         id="search"
         type="text"
       />

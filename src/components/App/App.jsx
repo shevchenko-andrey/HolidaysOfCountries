@@ -33,6 +33,7 @@ export const App = () => {
   const [holidays, setHolidays] = useState([]);
   const [query, setQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [isSortingByDescending, setIsSortingByDescending] = useState(true);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -66,6 +67,18 @@ export const App = () => {
     [countries, query]
   );
 
+  const sortedCountries = useMemo(() => {
+    const sortedCountries = filteredCountries.sort((first, second) => {
+      if (first.name.toLowerCase() < second.name.toLowerCase()) {
+        return -1;
+      } else if (first.name.toLowerCase() > second.name.toLowerCase()) {
+        return 1;
+      }
+      return 0;
+    });
+    return isSortingByDescending ? sortedCountries : sortedCountries.reverse();
+  }, [filteredCountries, isSortingByDescending]);
+
   return (
     <div className={styles.container}>
       <h1>React Test</h1>
@@ -75,17 +88,24 @@ export const App = () => {
             {/* #2 On the input, filter the countries listed below */}
             <SearchField value={query} onChange={setQuery} />
             {/* #4 Sort button */}
-            <Button />
+            <Button
+              title={
+                isSortingByDescending
+                  ? 'Sort by descending'
+                  : 'Sort by ascending'
+              }
+              onClick={() => setIsSortingByDescending(!isSortingByDescending)}
+            />
             {/* #5 Reset button */}
             <Button />
           </section>
           <ListOfCountry
             onSelectCountry={setSelectedCountry}
-            countries={filteredCountries}
+            countries={sortedCountries}
           ></ListOfCountry>
         </div>
         <div className={styles['info-area']}>
-          <p>{selectedCountry && selectedCountry}</p>
+          <p>{selectedCountry && 'Holidays: '}</p>
           <ListOfHolidays holidays={holidays} />
         </div>
       </div>

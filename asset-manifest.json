@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/HolidaysOfCountries/static/css/main.f74928ad.css",
+    "main.js": "/HolidaysOfCountries/static/js/main.d00eabae.js",
+    "index.html": "/HolidaysOfCountries/index.html",
+    "main.f74928ad.css.map": "/HolidaysOfCountries/static/css/main.f74928ad.css.map",
+    "main.d00eabae.js.map": "/HolidaysOfCountries/static/js/main.d00eabae.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f74928ad.css",
+    "static/js/main.d00eabae.js"
+  ]
+}

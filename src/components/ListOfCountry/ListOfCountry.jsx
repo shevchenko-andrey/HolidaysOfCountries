@@ -6,14 +6,13 @@ export const ListOfCountry = ({ countries, onSelectCountry }) => {
   const isExistCountries = useMemo(() => countries.length > 0, [countries]);
   if (isExistCountries) {
     return (
-      <ul>
+      <ul className={styles.list}>
         {isExistCountries &&
           countries.map(country => (
             <Country
               onSelectCountry={onSelectCountry}
-              countryCode={country.countryCode}
+              country={country}
               key={country.countryCode}
-              name={country.name}
             />
           ))}
       </ul>

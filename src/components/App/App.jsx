@@ -4,8 +4,9 @@ import { getPublicHolidays } from '../../services/api/holidaysService';
 import styles from './App.module.scss';
 import { ListOfCountry } from '../ListOfCountry/ListOfCountry';
 import { ListOfHolidays } from '../ListOfHolidays/ListOfHolidays';
-import { SearchField } from '../SearchField/SearchField';
-import { Button } from '../Button/Button';
+import { sortByDescending } from 'helpers/sortByDescending';
+import { filterByQueryString } from 'helpers/filterByQueryString';
+import { SearchArea } from 'components/SearchArea/SearchArea';
 
 // >>>>> Instructions:
 // Fork the exercises to create your own personal workspace.
@@ -32,7 +33,7 @@ export const App = () => {
   const [countries, setCountries] = useState([]);
   const [holidays, setHolidays] = useState([]);
   const [query, setQuery] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [isSortingByDescending, setIsSortingByDescending] = useState(true);
   const isFirstRender = useRef(true);
 
@@ -50,65 +51,50 @@ export const App = () => {
       return;
     }
 
-    if (!selectedCountry) {
-      return;
-    }
-
     const fetchHolidays = async () => {
-      const holidays = await getPublicHolidays(selectedCountry);
+      if (!selectedCountry) {
+        setHolidays([]);
+        return;
+      }
+      const holidays = await getPublicHolidays(selectedCountry.countryCode);
       setHolidays(holidays);
     };
 
     fetchHolidays();
   }, [selectedCountry]);
 
-  const filteredCountries = useMemo(
-    () => countries.filter(country => country.name.includes(query)),
-    [countries, query]
-  );
+  const filteredCountries = useMemo(() => {
+    setSelectedCountry(null);
+    return filterByQueryString(countries, query);
+  }, [countries, query]);
 
   const sortedCountries = useMemo(() => {
-    const sortedCountries = filteredCountries.sort((first, second) => {
-      if (first.name.toLowerCase() < second.name.toLowerCase()) {
-        return -1;
-      } else if (first.name.toLowerCase() > second.name.toLowerCase()) {
-        return 1;
-      }
-      return 0;
-    });
+    const sortedCountries = filteredCountries.sort(sortByDescending);
     return isSortingByDescending ? sortedCountries : sortedCountries.reverse();
   }, [filteredCountries, isSortingByDescending]);
 
   return (
-    <div className={styles.container}>
-      <h1>React Test</h1>
-      <div className={styles.body}>
-        <div className={styles['search-area']}>
-          <section className={styles['search-field']}>
-            {/* #2 On the input, filter the countries listed below */}
-            <SearchField value={query} onChange={setQuery} />
-            {/* #4 Sort button */}
-            <Button
-              title={
-                isSortingByDescending
-                  ? 'Sort by descending'
-                  : 'Sort by ascending'
-              }
-              onClick={() => setIsSortingByDescending(!isSortingByDescending)}
-            />
-            {/* #5 Reset button */}
-            <Button />
-          </section>
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>React Test</h1>
+
+        <SearchArea
+          setIsSortingByDescending={setIsSortingByDescending}
+          isSortingByDescending={isSortingByDescending}
+          query={query}
+          setQuery={setQuery}
+          selectedCountry={selectedCountry}
+        />
+
+        <div className={styles.wrapper}>
           <ListOfCountry
             onSelectCountry={setSelectedCountry}
             countries={sortedCountries}
           ></ListOfCountry>
-        </div>
-        <div className={styles['info-area']}>
-          <p>{selectedCountry && 'Holidays: '}</p>
+
           <ListOfHolidays holidays={holidays} />
         </div>
       </div>
-    </div>
+    </main>
   );
 };

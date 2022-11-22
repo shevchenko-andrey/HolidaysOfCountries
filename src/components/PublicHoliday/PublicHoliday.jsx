@@ -1,5 +1,7 @@
+import styles from './PublicHoliday.module.scss';
+
 export const PublicHoliday = ({ name }) => (
-  <li>
+  <li className={styles.holiday}>
     <span>{name}</span>
   </li>
 );

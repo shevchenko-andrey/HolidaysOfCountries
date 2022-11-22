@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { nanoid } from 'nanoid';
 import { PublicHoliday } from '../PublicHoliday/PublicHoliday';
 import styles from './ListOfHolidays.module.scss';
 
@@ -6,9 +7,9 @@ export const ListOfHolidays = ({ holidays }) => {
   const isExistHolidays = useMemo(() => holidays.length > 0, [holidays]);
   if (isExistHolidays) {
     return (
-      <ul>
+      <ul className={styles.list}>
         {holidays.map(holiday => (
-          <PublicHoliday key={holiday.name} name={holiday.name} />
+          <PublicHoliday key={`${nanoid()}`} name={holiday.name} />
         ))}
       </ul>
     );

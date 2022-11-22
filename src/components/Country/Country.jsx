@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './Country.module.scss';
 
-export const Country = ({ name, countryCode, onSelectCountry }) => {
-  const onClick = () => onSelectCountry(countryCode);
+export const Country = ({ country, onSelectCountry }) => {
+  const onClick = () => onSelectCountry(country);
   return (
     <li className={styles.card} onClick={onClick}>
-      <span>{name}</span>
+      <span>{country.name}</span>
     </li>
   );
 };

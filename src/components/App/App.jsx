@@ -1,4 +1,10 @@
-import './App.css';
+import { useState, useEffect } from 'react';
+import { getCountries } from '../../services/api/countryService';
+import styles from './App.module.scss';
+import { ListOfCountry } from 'components/ListOfCountry/ListOfCountry';
+import { SearchField } from 'components/SearchField/SearchField';
+import { Button } from 'components/Button/Button';
+
 // >>>>> Instructions:
 // Fork the exercises to create your own personal workspace.
 // You will need to create an account. The tool is free.
@@ -24,43 +30,37 @@ import './App.css';
   #1 Place component ListItem here and use it in ListItems component below to display items
 */
 
-const ListItems = ({ items }) => {
-  return <ul>{/* #1 place for ListItem */}</ul>;
-};
-
 export const App = () => {
   const [data, setData] = useState([]);
   const [selectedCountryHolidays, setselectedCountryHolidays] = useState([]);
 
   useEffect(() => {
-    // NOTE: API might block requests if fetch too frequently
-    axios
-      .get('https://date.nager.at/api/v3/AvailableCountries')
-      .then(response => {
-        console.log('Data Items: ', response.data);
-      })
-      .catch(error => console.log('Axios error: ', error));
+    const fetchHolidays = async () => {
+      const date = await getCountries();
+      setData(date);
+    };
+    fetchHolidays();
   }, []);
 
   const onCountyClick = () => {
     // #3 update this function to handle county click and fetch holidays
   };
   return (
-    <div class="container">
+    <div class={styles.container}>
       <h1>React Test</h1>
-      <div class="body">
-        <div class="search-area">
-          <section class="search-field">
-            <label for="search">Search text</label>
+      <div class={styles.body}>
+        <div class={styles['search-area']}>
+          <section class={styles['search-field']}>
             {/* #2 On the input, filter the countries listed below */}
-            <input id="search" type="text" />
-
-            <button>{/* #4 Sort button */}</button>
-            <button>{/* #5 Reset button */}</button>
+            <SearchField />
+            {/* #4 Sort button */}
+            <Button />
+            {/* #5 Reset button */}
+            <Button />
           </section>
-          <ListItems items={data}></ListItems>
+          <ListOfCountry items={data}></ListOfCountry>
         </div>
-        <div class="info-area">
+        <div class={styles['info-area']}>
           {/* #3 display selectedCountryHolidays here */}
         </div>
       </div>
